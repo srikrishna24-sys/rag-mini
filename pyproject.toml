@@ -8,7 +8,7 @@ dependencies = [
   "openai>=1.0.0",
   "faiss-cpu",
   "numpy",
-  "typer[all]",
+  "typer",
   "python-dotenv",
 ]
 
