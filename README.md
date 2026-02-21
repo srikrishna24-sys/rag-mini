@@ -1,79 +1,196 @@
-# rag-mini
 
-Simple rag application for upskilling purpose
+# 📚 rag-mini
 
-settings.py
+A simple Retrieval-Augmented Generation (RAG) application built for learning and upskilling purposes.
 
-Loads .env
+This project demonstrates how to:
 
-Returns configuration like:
+* Ingest documents
+* Create embeddings
+* Store vectors in FAISS
+* Retrieve relevant context
+* Generate grounded answers using an LLM
+* Build a clean CLI interface
 
-OPENAI_API_KEY
+---
 
-embedding model name
+## 🏗 Project Architecture
 
-index folder name
+```
+rag-mini/
+│
+├── settings.py
+├── ingest.py
+├── retriever.py
+├── generate.py
+├── cli.py
+│
+├── data/
+├── indexes/
+└── .env
+```
 
-chunk sizes
+---
 
-✅ Goal: keep all config in one place.
+## ⚙️ settings.py — Configuration Layer
 
-ingest.py (build the “library index”)
+Centralized configuration management.
 
-This runs when you do: rag-mini ingest
+**Responsibilities:**
 
-It:
+* Loads environment variables from `.env`
+* Provides project configuration such as:
 
-Reads all .md/.txt from data/
+  * `OPENAI_API_KEY`
+  * Embedding model name
+  * Index folder path
+  * Chunk size
+  * Chunk overlap
 
-Splits them into chunks (small pieces)
+**Goal:**
+Keep all configuration in one place to make the system clean and maintainable.
 
-Calls OpenAI embeddings to convert each chunk into a vector
+---
 
-Stores vectors in FAISS
+## 📥 ingest.py — Build the Library Index
 
-Saves metadata (chunk text + which file it came from)
+Run this command:
 
-✅ Output:
-
-indexes/faiss.index (vectors)
-
-indexes/metadata.jsonl (chunk text + source info)
-
-retriever.py (find relevant chunks)
-
-This runs during: rag-mini ask "..."
-
-It:
-
-Embeds your question into a vector
-
-FAISS returns “closest chunk vectors”
-
-Loads metadata to get actual chunk text + file path
-
-✅ Output: top-k relevant chunks + similarity scores
-
-generate.py (write the final answer)
-
-This is the LLM step.
-
-It:
-
-Takes the retrieved chunks
-
-Builds a “CONTEXT” block with citations
-
-Calls OpenAI Responses API
-
-LLM writes an answer only using that context
-
-✅ Output: a clean answer + citations
-
-cli.py (glue / command line app)
-
-Defines commands:
-
+```bash
 rag-mini ingest
+```
 
-rag-mini ask "question"
+### What it does:
+
+1. Reads all `.md` and `.txt` files from the `data/` folder
+2. Splits documents into small chunks
+3. Converts each chunk into vector embeddings using OpenAI
+4. Stores embeddings in FAISS
+5. Saves metadata (chunk text + source file info)
+
+### Output:
+
+```
+indexes/faiss.index        # Vector index
+indexes/metadata.jsonl     # Chunk text + source information
+```
+
+---
+
+## 🔎 retriever.py — Retrieve Relevant Chunks
+
+Triggered when running:
+
+```bash
+rag-mini ask "your question"
+```
+
+### What it does:
+
+1. Converts your question into an embedding
+2. Searches FAISS for closest vector matches
+3. Loads metadata to retrieve:
+
+   * Chunk text
+   * Source file path
+   * Similarity score
+
+### Output:
+
+* Top-K most relevant chunks
+* Similarity scores
+
+---
+
+## 🤖 generate.py — Generate Grounded Answer
+
+This is the LLM layer.
+
+### What it does:
+
+1. Takes retrieved chunks
+2. Builds a structured **CONTEXT block with citations**
+3. Calls the OpenAI Responses API
+4. Forces the model to answer only from retrieved context
+
+### Output:
+
+* Clean final answer
+* Source citations
+
+---
+
+## 🖥 cli.py — Command Line Interface
+
+Acts as the glue between all modules.
+
+### Available Commands:
+
+#### 🔹 Ingest Documents
+
+```bash
+rag-mini ingest
+```
+
+Builds the FAISS index from files inside `data/`.
+
+#### 🔹 Ask a Question
+
+```bash
+rag-mini ask "What is RAG?"
+```
+
+Retrieves relevant chunks and generates a grounded answer.
+
+---
+
+## 🧠 Learning Goals
+
+This project helps you understand:
+
+* How embeddings work
+* How vector databases (FAISS) function
+* The separation between retrieval and generation
+* How to structure a production-style RAG system
+* Clean software architecture for AI applications
+
+---
+
+## 📦 Requirements
+
+* Python 3.9+
+* FAISS
+* OpenAI SDK
+* python-dotenv
+
+---
+
+## 🔐 Environment Setup
+
+Create a `.env` file:
+
+```env
+OPENAI_API_KEY=your_key_here
+```
+
+---
+
+## 🚀 Future Improvements
+
+* Add streaming responses
+* Add document upload support
+* Add reranking layer
+* Add evaluation metrics
+* Add web UI (FastAPI / Streamlit)
+
+---
+
+If you want, I can now:
+
+* 🔥 Make it look like a serious production-grade open source repo
+* 📈 Add badges + architecture diagram
+* 🧠 Add explanation section for interviews
+* 🏗 Help you push this cleanly to GitHub with proper commits
+* 📄 Generate a LICENSE + CONTRIBUTING file
+
+Tell me your goal — learning project or portfolio project?
