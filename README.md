@@ -185,12 +185,4 @@ OPENAI_API_KEY=your_key_here
 
 ---
 
-If you want, I can now:
 
-* 🔥 Make it look like a serious production-grade open source repo
-* 📈 Add badges + architecture diagram
-* 🧠 Add explanation section for interviews
-* 🏗 Help you push this cleanly to GitHub with proper commits
-* 📄 Generate a LICENSE + CONTRIBUTING file
-
-Tell me your goal — learning project or portfolio project?
